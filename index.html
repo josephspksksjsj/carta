@@ -1,0 +1,296 @@
+<!DOCTYPE html><html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carta de Cumpleaños</title><link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap" rel="stylesheet"><style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  background:#fde7ef;
+  overflow:hidden;
+  font-family:Arial,sans-serif;
+}
+
+/* ---------- CARTA ---------- */
+#envelope{
+  position:fixed;
+  inset:0;
+  background:#fde7ef;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:20;
+  transition:transform 2.3s ease, opacity 2.3s ease;
+}
+
+#envelope.open{
+  transform:translateY(-120%);
+  opacity:0;
+  pointer-events:none;
+}
+
+#open-btn{
+  font-family:'Pacifico', cursive;
+  font-size:clamp(34px, 9vw, 48px);
+  cursor:pointer;
+  animation:pulse 1.4s infinite;
+  user-select:none;
+  text-align:center;
+}
+
+@keyframes pulse{
+  50%{transform:scale(1.12)}
+}
+
+/* ---------- ESCENA ---------- */
+#scene{
+  width:100vw;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:relative;
+}
+
+/* ---------- PASTEL ---------- */
+#cake-container{
+  position:relative;
+  z-index:3;
+  text-align:center;
+}
+
+#cake-container img{
+  width:min(92vw, 540px);
+  border-radius:30px;
+}
+
+/* ---------- VELA ---------- */
+.candle-hitbox{
+  position:absolute;
+  top:32.5%;
+  left:49.5%;
+  transform:translateX(-50%);
+  width:90px;
+  height:140px;
+  z-index:6;
+  cursor:pointer;
+}
+
+.candle-body{
+  position:absolute;
+  bottom:30px;
+  left:50%;
+  transform:translateX(-50%);
+  width:10px;
+  height:55px;
+  border-radius:5px;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      #fff,
+      #fff 6px,
+      #ffd6e0 6px,
+      #ffd6e0 12px
+    );
+}
+
+.flame{
+  position:absolute;
+  bottom:90px;
+  left:50%;
+  transform:translateX(-50%);
+  width:16px;
+  height:24px;
+  background:radial-gradient(circle at 50% 30%,#fff7b2,#ff922b 70%);
+  border-radius:50% 50% 50% 50% / 70% 70% 30% 30%;
+  animation:flicker .4s infinite;
+}
+
+@keyframes flicker{
+  50%{opacity:.8;transform:translateX(-50%) scale(.9)}
+}
+
+/* ---------- TEXTOS ---------- */
+#text-container{
+  margin-top:6px;
+  height:26px;
+  position:relative;
+}
+
+.msg{
+  position:absolute;
+  width:100%;
+  left:0;
+  top:0;
+  text-align:center;
+  font-size:18px;
+  opacity:0;
+  transition:opacity 1s ease;
+}
+
+.msg.show{opacity:1}
+
+.special-font{
+  font-family:'Dancing Script', cursive;
+  font-size:22px;
+}
+
+/* ---------- SAPITOS ---------- */
+.sapito{
+  position:absolute;
+  bottom:16%;
+  width:clamp(90px, 22vw, 190px);
+  opacity:0;
+  transform:scale(0.6);
+  transition:opacity 1s ease, transform 1s ease;
+  z-index:4;
+}
+
+#sapito-left{ left:6%; }
+#sapito-right{ right:6%; }
+
+.sapito.show{
+  opacity:1;
+  transform:scale(1);
+}
+
+/* ---------- GLOBOS ---------- */
+#balloons{
+  position:absolute;
+  inset:0;
+  z-index:4;
+  pointer-events:none;
+}
+
+.balloon{
+  position:absolute;
+  width:70px;
+  height:90px;
+  border-radius:50%;
+}
+
+.balloon::after{
+  content:"";
+  position:absolute;
+  bottom:-28px;
+  left:50%;
+  width:2px;
+  height:28px;
+  background:#555;
+}
+
+.fly{ animation:floatUp 4s ease-in forwards; }
+
+@keyframes floatUp{
+  to{ transform:translateY(-140vh); opacity:0; }
+}
+
+/* ---------- CONFETI ---------- */
+#confetti{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:10;
+}
+
+.conf{ position:absolute; animation:confFall 3.2s linear forwards; }
+.conf.rect{width:8px;height:14px}
+.conf.circle{width:8px;height:8px;border-radius:50%}
+
+@keyframes confFall{
+  to{ transform:translateY(110vh) rotate(720deg); opacity:0; }
+}
+
+@media (max-width:480px){
+  #text-container{ margin-top:12px; }
+  .special-font{ font-size:20px; }
+  .sapito{ bottom:14%; }
+}
+</style></head><body><div id="envelope">
+  <div id="open-btn">🎁 Ábreme 🎁</div>
+</div><div id="scene">  <div id="cake-container">
+    <img src="pastel.png" alt="Pastel"><div class="candle-hitbox" id="candle">
+  <div class="candle-body"></div>
+  <div class="flame" id="flame"></div>
+</div>
+
+<div id="text-container">
+  <div class="msg" id="msg-hint">Toca la vela dos veces ✨</div>
+  <div class="msg special-font" id="msg-feliz">Feliz Day 💖</div>
+  <div class="msg special-font" id="msg-bien">Que la pases bien 🎉</div>
+</div>
+
+  </div>  <img src="sapito1.png" id="sapito-left" class="sapito">
+  <img src="sapito2.png" id="sapito-right" class="sapito">  <div id="balloons"></div>
+</div><div id="confetti"></div><audio id="birthdaySong">
+  <source src="cumpleanos.mp3" type="audio/mpeg">
+</audio><script>
+const colors=["#ff6b6b","#ffd93d","#6bcBef","#c77dff","#51cf66","#ff922b"];
+const balloons=document.getElementById("balloons");
+
+for(let i=0;i<55;i++){
+  const b=document.createElement("div");
+  b.className="balloon";
+  b.style.background=colors[Math.floor(Math.random()*colors.length)];
+  b.style.left=Math.random()*100+"vw";
+  b.style.top=100+Math.random()*40+"vh";
+  balloons.appendChild(b);
+}
+
+const song=document.getElementById("birthdaySong");
+let candleEnabled=false;
+
+document.getElementById("open-btn").addEventListener("click",()=>{
+  document.getElementById("envelope").classList.add("open");
+  document.querySelectorAll(".balloon").forEach(b=>b.classList.add("fly"));
+  song.currentTime=0;
+  song.play();
+
+  setTimeout(()=>{
+    candleEnabled=true;
+    document.getElementById("msg-hint").classList.add("show");
+  },4000);
+});
+
+let lastTap=0;
+let apagada=false;
+const candle=document.getElementById("candle");
+const flame=document.getElementById("flame");
+const confetti=document.getElementById("confetti");
+
+candle.addEventListener("click",()=>{
+  if(!candleEnabled || apagada) return;
+  const now=Date.now();
+  if(now-lastTap<500){
+    apagada=true;
+    flame.style.display="none";
+    lanzarConfeti();
+  }
+  lastTap=now;
+});
+
+function lanzarConfeti(){
+  for(let i=0;i<120;i++){
+    const c=document.createElement("div");
+    c.className="conf "+(Math.random()>.5?"rect":"circle");
+    c.style.left=Math.random()*100+"vw";
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    confetti.appendChild(c);
+    setTimeout(()=>c.remove(),3500);
+  }
+
+  document.getElementById("sapito-left").classList.add("show");
+  document.getElementById("sapito-right").classList.add("show");
+
+  const hint=document.getElementById("msg-hint");
+  const feliz=document.getElementById("msg-feliz");
+  const bien=document.getElementById("msg-bien");
+
+  hint.classList.remove("show");
+  setTimeout(()=>feliz.classList.add("show"),600);
+  setTimeout(()=>feliz.classList.remove("show"),2600);
+  setTimeout(()=>bien.classList.add("show"),3200);
+}
+</script></body>
+</html>
